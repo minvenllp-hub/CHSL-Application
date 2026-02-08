@@ -627,7 +627,7 @@ function renderCategories() {
             }, {});
             
             Object.keys(level2Groups).sort().forEach(level2 => {
-                if (!level2 || level2 === "None") return;
+                if (!level2) return;
                 
                 const level2Items = level2Groups[level2];
                 const level2Id = level2Items[0]?.id;
