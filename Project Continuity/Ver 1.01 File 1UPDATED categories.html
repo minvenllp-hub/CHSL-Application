@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHSL Expense System - Expense Categories</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(90deg, #1a2980, #26d0ce);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-placeholder {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(45deg, #1a2980, #26d0ce);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+        .header-text {
+            flex: 1;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .powered-by {
+            font-size: 10px;
+            opacity: 0.7;
+            margin-top: 3px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        
+        .content {
+            display: flex;
+            min-height: 700px;
+        }
+        
+        .sidebar {
+            width: 280px;
+            background: #f8f9fa;
+            border-right: 1px solid #e0e0e0;
+            padding: 25px;
+        }
+        
+        .main-content {
+            flex: 1;
+            padding: 0;
+            overflow: hidden;
+        }
+        
+        .module-title {
+            color: #2c3e50;
+            padding: 25px 25px 15px 25px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+        }
+        
+        .module-title i {
+            color: #667eea;
+        }
+        
+        .tabs {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 0 25px;
+        }
+        
+        .tab {
+            padding: 15px 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .tab:hover {
+            background: #e9ecef;
+            color: #333;
+        }
+        
+        .tab.active {
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            background: white;
+        }
+        
+        .tab-content {
+            padding: 25px;
+            display: none;
+            overflow-y: auto;
+            max-height: calc(700px - 130px);
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .form-section {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #444;
+            font-size: 14px;
+        }
+        
+        .form-group .hint {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+            font-style: italic;
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        select, input, textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.3s;
+            background: white;
+        }
+        
+        select:focus, input:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        select:disabled {
+            background-color: #f5f5f5;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        input.invalid, textarea.invalid {
+            border-color: #dc3545;
+            background-color: #f8d7da;
+        }
+        
+        .validation-error {
+            color: #dc3545;
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        .btn {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-primary:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+        
+        .btn-upload {
+            background: #17a2b8;
+            color: white;
+        }
+        
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .active {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .inactive {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .categories-tree {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        
+        .tree-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        
+        .tree-item:hover {
+            background: #f8f9fa;
+        }
+        
+        .tree-level {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .level-indicator {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+        }
+        
+        .level-1 { background: #667eea; }
+        .level-2 { background: #4CAF50; }
+        .level-3 { background: #FF9800; }
+        .level-4 { background: #9C27B0; }
+        
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 14px;
+            padding: 6px 8px;
+            border-radius: 4px;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .action-btn:hover {
+            background: #f0f0f0;
+        }
+        
+        .action-btn.delete {
+            color: #dc3545;
+        }
+        
+        .action-btn.delete:hover {
+            background: #f8d7da;
+        }
+        
+        .action-btn.disabled {
+            color: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .action-btn.disabled:hover {
+            background: none;
+        }
+        
+        .upload-section {
+            background: #e8f4fc;
+            padding: 25px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .upload-area {
+            text-align: center;
+            padding: 40px 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 8px;
+            border: 2px dashed #17a2b8;
+            background: rgba(23, 162, 184, 0.05);
+            margin: 20px 0;
+        }
+        
+        .upload-area:hover {
+            background: rgba(23, 162, 184, 0.1);
+            border-color: #0d8ba8;
+        }
+        
+        .upload-area i {
+            font-size: 48px;
+            color: #17a2b8;
+            margin-bottom: 15px;
+        }
+        
+        .file-input {
+            display: none;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            display: none;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        
+        .csv-preview {
+            margin-top: 20px;
+            overflow-x: auto;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            font-size: 12px;
+            position: sticky;
+            top: 0;
+        }
+        
+        tr:hover {
+            background: #f5f5f5;
+        }
+        
+        .error-row {
+            background: #f8d7da !important;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .stat-card {
+            flex: 1;
+            min-width: 120px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        .module-list {
+            margin-top: 20px;
+        }
+        
+        .module-item {
+            padding: 12px 15px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s;
+            border: 1px solid transparent;
+        }
+        
+        .module-item:hover {
+            background: #e9ecef;
+            border-color: #dee2e6;
+        }
+        
+        .module-item.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        
+        .none-value {
+            color: #999;
+            font-style: italic;
+            font-size: 12px;
+        }
+        
+        .free-format-indicator {
+            background: #e8f4fc;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+            color: #17a2b8;
+            margin-left: 5px;
+            border: 1px solid #b6e0f1;
+        }
+        
+        .level-description {
+            font-size: 11px;
+            color: #666;
+            margin-left: 5px;
+            font-weight: normal;
+            font-style: italic;
+        }
+        
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+        
+        .instructions h4 {
+            margin-top: 0;
+            color: #856404;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        
+        .instructions ul {
+            margin: 10px 0 0 0;
+            padding-left: 20px;
+        }
+        
+        .instructions li {
+            margin-bottom: 6px;
+            line-height: 1.4;
+            font-size: 12px;
+        }
+        
+        .char-counter {
+            font-size: 11px;
+            color: #666;
+            text-align: right;
+            margin-top: 4px;
+        }
+        
+        .char-counter.warning {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .hierarchy-explanation {
+            font-size: 11px;
+            color: #666;
+            margin-top: 5px;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border-radius: 4px;
+            border-left: 3px solid #667eea;
+        }
+        
+        .form-section h3 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 18px;
+        }
+        
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+        
+        .no-sublevels {
+            color: #999;
+            font-style: italic;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+        
+        .no-data-message {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .no-data-message i {
+            font-size: 48px;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+        
+        .bulk-upload-info {
+            background: #e8f4fc;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 15px 0;
+            border-left: 4px solid #17a2b8;
+        }
+        
+        .bulk-upload-info h4 {
+            margin-top: 0;
+            color: #0c5460;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .checkbox-group {
+            margin: 10px 0;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+        }
+        
+        .bulk-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #dee2e6;
+        }
+        
+        @media (max-width: 1200px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                border-right: none;
+                border-bottom: 1px solid #e0e0e0;
+            }
+            
+            .form-row {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .tabs {
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+                gap: 15px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .stats {
+                flex-direction: column;
+            }
+            
+            .actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+            
+            .tab {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-section">
+                <div class="logo-placeholder">MV</div>
+                <div class="header-text">
+                    <h1>CHSL Expense Management System</h1>
+                    <div class="powered-by">Designed and Powered by: Minerva Ventures LLP</div>
+                </div>
+            </div>
+            <div class="user-info">
+                <i class="fas fa-user-circle"></i> Admin
+            </div>
+        </div>
+        
+        <div class="content">
+            <div class="sidebar">
+                <div class="module-title" style="padding: 0; border: none; margin-bottom: 20px;">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Master Data Modules</span>
+                </div>
+                <div class="module-list">
+                    <div class="module-item active">
+                        <i class="fas fa-folder-tree"></i> Expense Categories
+                    </div>
+                    <div class="module-item">
+                        <i class="fas fa-users"></i> MC Members
+                    </div>
+                    <div class="module-item">
+                        <i class="fas fa-store"></i> Vendor Management
+                    </div>
+                    <div class="module-item">
+                        <i class="fas fa-cogs"></i> Configuration
+                    </div>
+                    <div class="module-item">
+                        <i class="fas fa-file-upload"></i> Bulk Upload
+                    </div>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-value" id="totalCategories">0</div>
+                        <div class="stat-label">Expense Types</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="activeCategories">0</div>
+                        <div class="stat-label">Active</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="withSublevels">0</div>
+                        <div class="stat-label">With Sub-Levels</div>
+                    </div>
+                </div>
+                
+                <div class="instructions">
+                    <h4><i class="fas fa-info-circle"></i> Data Entry Rules</h4>
+                    <ul>
+                        <li><strong>All Fields:</strong> Max 25 characters, alphanumeric with spaces</li>
+                        <li><strong>Major Expense Head:</strong> Cannot edit existing, only add new</li>
+                        <li><strong>If Minor = "None":</strong> No sub-levels shown</li>
+                        <li><strong>"Free Format":</strong> User enters custom text</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <div class="module-title">
+                    <i class="fas fa-folder-tree"></i>
+                    <span>Expense Categories Management</span>
+                </div>
+                
+                <div class="tabs">
+                    <div class="tab active" data-tab="add-edit">
+                        <i class="fas fa-plus-circle"></i> Add/Edit Category
+                    </div>
+                    <div class="tab" data-tab="hierarchy">
+                        <i class="fas fa-sitemap"></i> Expense Category Hierarchy
+                    </div>
+                    <div class="tab" data-tab="bulk-upload">
+                        <i class="fas fa-file-upload"></i> Bulk Upload via CSV
+                    </div>
+                </div>
+                
+                <div class="alert" id="messageAlert"></div>
+                
+                <!-- Tab 1: Add/Edit Category -->
+                <div class="tab-content active" id="add-edit-tab">
+                    <div class="form-section">
+                        <h3><i class="fas fa-plus-circle"></i> Add/Edit Expense Type</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="level1" class="required">Major Expense Head</label>
+                                <select id="level1" onchange="updateLevel2()">
+                                    <option value="">Select Major Expense Head</option>
+                                </select>
+                                <div class="hint">Only addition allowed at this level. Cannot edit existing.</div>
+                                <div class="validation-error" id="level1-error"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="level2" class="required">Minor Expense Head</label>
+                                <select id="level2" onchange="updateLevel3()">
+                                    <option value="">Select Major Expense Head first</option>
+                                </select>
+                                <div class="hint">Select or add new minor expense head</div>
+                                <div class="validation-error" id="level2-error"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row" id="level3-row">
+                            <div class="form-group">
+                                <label for="level3" class="required">Why Spent</label>
+                                <select id="level3" onchange="updateLevel4()">
+                                    <option value="">Select Minor Expense Head first</option>
+                                </select>
+                                <div class="hint">What was the expense for?</div>
+                                <div class="validation-error" id="level3-error"></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="level4">Spent For</label>
+                                <select id="level4">
+                                    <option value="">Select Why Spent first</option>
+                                </select>
+                                <div class="hint">Optional. Specific item or free format entry</div>
+                                <div class="validation-error" id="level4-error"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" id="freeTextGroup" style="display: none;">
+                            <label for="freeText" class="required">Free Format Entry</label>
+                            <input type="text" id="freeText" placeholder="Enter custom description (max 25 characters)" maxlength="25">
+                            <div class="char-counter" id="charCount">0/25 characters</div>
+                            <div class="hint">Free format allows custom text entry. Will be marked with blue badge.</div>
+                            <div class="validation-error" id="freeText-error"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="status">Status</label>
+                            <select id="status">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                            </select>
+                            <div class="hint">Inactive categories won't appear in dropdowns for voucher entry</div>
+                        </div>
+                        
+                        <input type="hidden" id="editId" value="">
+                        <input type="hidden" id="isLevel1Edit" value="false">
+                        
+                        <div class="button-group">
+                            <button class="btn btn-primary" onclick="saveCategory()" id="saveButton">
+                                <i class="fas fa-save"></i> Save Expense Type
+                            </button>
+                            <button class="btn btn-secondary" onclick="clearForm()">
+                                <i class="fas fa-times"></i> Clear Form
+                            </button>
+                            <button class="btn btn-warning" onclick="loadDefaultData()">
+                                <i class="fas fa-database"></i> Load Default Categories
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab 2: Expense Category Hierarchy -->
+                <div class="tab-content" id="hierarchy-tab">
+                    <div class="categories-tree">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="margin: 0;"><i class="fas fa-sitemap"></i> Expense Category Hierarchy</h3>
+                            <div style="display: flex; gap: 10px; align-items: center;">
+                                <button class="btn btn-secondary btn-sm" onclick="toggleCheckboxes()" id="toggleCheckBtn" style="padding: 8px 15px; font-size: 12px;">
+                                    <i class="fas fa-check-square"></i> Select Multiple
+                                </button>
+                                <button class="btn btn-danger btn-sm" onclick="deleteSelected()" id="deleteSelectedBtn" style="padding: 8px 15px; font-size: 12px; display: none;">
+                                    <i class="fas fa-trash"></i> Delete Selected
+                                </button>
+                            </div>
+                        </div>
+                        <div id="categoriesList">
+                            <div class="no-data-message">
+                                <i class="fas fa-folder-open"></i>
+                                <h3>No expense types loaded yet</h3>
+                                <p>Click "Load Default Categories" in the Add/Edit tab to start</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Tab 3: Bulk Upload -->
+                <div class="tab-content" id="bulk-upload-tab">
+                    <div class="upload-section">
+                        <h3><i class="fas fa-file-upload"></i> Bulk Upload via CSV</h3>
+                        
+                        <div class="bulk-upload-info">
+                            <h4><i class="fas fa-info-circle"></i> Upload Instructions</h4>
+                            <p>Upload CSV file with columns: <code>Major Expense Head, Minor Expense Head, Why Spent, Spent For, Status</code></p>
+                            <p><strong>Rules:</strong></p>
+                            <ul style="margin: 10px 0 0 20px;">
+                                <li>All fields max 25 characters</li>
+                                <li>Status must be "Active" or "Inactive"</li>
+                                <li>Use "None" for levels not applicable</li>
+                                <li>Use "Free Format" for user-entered text</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p style="font-size: 16px; font-weight: 500; margin: 10px 0;">Click to upload CSV file</p>
+                            <p style="font-size: 12px; color: #666; margin: 0;">or drag and drop file here</p>
+                            <p style="font-size: 11px; color: #999; margin-top: 10px;">Supported format: .csv</p>
+                        </div>
+                        <input type="file" id="fileInput" class="file-input" accept=".csv" onchange="handleFileUpload(event)">
+                        
+                        <div class="button-group" style="margin-top: 20px;">
+                            <button class="btn btn-upload" onclick="downloadSampleCSV()">
+                                <i class="fas fa-download"></i> Download Sample CSV
+                            </button>
+                            <button class="btn btn-success" onclick="exportToCSV()" id="exportButton" style="display: none;">
+                                <i class="fas fa-file-export"></i> Export Current Data
+                            </button>
+                        </div>
+                        
+                        <div class="csv-preview" id="csvPreview" style="display: none;">
+                            <h4 style="margin-top: 0;"><i class="fas fa-eye"></i> Upload Preview</h4>
+                            <div id="uploadStats" style="margin-bottom: 15px; padding: 10px; background: #f8f9fa; border-radius: 6px;"></div>
+                            <table id="previewTable">
+                                <thead>
+                                    <tr>
+                                        <th>Major Expense Head</th>
+                                        <th>Minor Expense Head</th>
+                                        <th>Why Spent</th>
+                                        <th>Spent For</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Preview rows will be inserted here -->
+                                </tbody>
+                            </table>
+                            <div class="button-group" style="margin-top: 20px;">
+                                <button class="btn btn-success" onclick="processUpload()">
+                                    <i class="fas fa-check"></i> Import All Valid Rows
+                                </button>
+                                <button class="btn btn-danger" onclick="cancelUpload()">
+                                    <i class="fas fa-times"></i> Cancel Upload
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="categories.js"></script>
+    <script>
+        // Tab switching functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tab switching
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                    
+                    this.classList.add('active');
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(`${tabId}-tab`).classList.add('active');
+                    
+                    // Refresh hierarchy view when switching to it
+                    if (tabId === 'hierarchy') {
+                        setTimeout(() => renderCategories(), 100);
+                    }
+                });
+            });
+            
+            // Character counter for free text
+            const freeText = document.getElementById('freeText');
+            if (freeText) {
+                freeText.addEventListener('input', function() {
+                    const count = this.value.length;
+                    const counter = document.getElementById('charCount');
+                    counter.textContent = `${count}/25 characters`;
+                    if (count >= 25) {
+                        counter.classList.add('warning');
+                    } else {
+                        counter.classList.remove('warning');
+                    }
+                    validateInput(this);
+                });
+            }
+            
+            // Show export button if there's data
+            if (typeof categories !== 'undefined' && categories.length > 0) {
+                document.getElementById('exportButton').style.display = 'inline-flex';
+            }
+            
+            // Input validation for all text inputs
+            document.querySelectorAll('input[type="text"]').forEach(input => {
+                input.addEventListener('input', function() {
+                    validateInput(this);
+                });
+                input.addEventListener('blur', function() {
+                    validateInput(this);
+                });
+            });
+        });
+        
+        // Input validation function
+        function validateInput(input) {
+            const value = input.value.trim();
+            const errorElement = document.getElementById(`${input.id}-error`);
+            
+            if (value.length > 25) {
+                showValidationError(input, errorElement, 'Maximum 25 characters allowed');
+                return false;
+            }
+            
+            if (value && !/^[a-zA-Z0-9\s\-&.,()/]+$/.test(value)) {
+                showValidationError(input, errorElement, 'Only alphanumeric characters, spaces, and basic punctuation allowed');
+                return false;
+            }
+            
+            if (value && /(\w)\1{2,}/.test(value)) {
+                showValidationError(input, errorElement, 'Cannot have 3 or more consecutive identical characters');
+                return false;
+            }
+            
+            if (value && /(.)\1{4,}/.test(value)) {
+                showValidationError(input, errorElement, 'Cannot have 5 or more consecutive identical characters (including spaces)');
+                return false;
+            }
+            
+            clearValidationError(input, errorElement);
+            return true;
+        }
+        
+        function showValidationError(input, errorElement, message) {
+            input.classList.add('invalid');
+            if (errorElement) {
+                errorElement.textContent = message;
+                errorElement.style.display = 'block';
+            }
+        }
+        
+        function clearValidationError(input, errorElement) {
+            input.classList.remove('invalid');
+            if (errorElement) {
+                errorElement.style.display = 'none';
+            }
+        }
+        
+        // Download sample CSV
+        function downloadSampleCSV() {
+            const csvContent = `Major Expense Head,Minor Expense Head,Why Spent,Spent For,Status
+Electricity,Meter 1,Power Bill,Monthly Consumption,Active
+Electricity,Meter 2,Power Bill,Monthly Consumption,Active
+Property Tax,Society Common Areas,None,None,Active
+Property Tax,Parking,None,None,Active
+BMC Water Charges,None,None,None,Active
+Audit Fees,None,None,None,Active
+,,,,
+,,,,
+,,,,
+,,,,
+,,,,
+`;
+            
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'expense_categories_template.csv';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showMessage('Downloaded CSV template. Fill in your data and upload.', 'success');
+        }
+        
+        // Toggle checkboxes for multiple selection
+        function toggleCheckboxes() {
+            const checkboxes = document.querySelectorAll('.category-checkbox');
+            const toggleBtn = document.getElementById('toggleCheckBtn');
+            const deleteBtn = document.getElementById('deleteSelectedBtn');
+            
+            if (checkboxes.length > 0) {
+                // Checkboxes already exist, remove them
+                checkboxes.forEach(cb => cb.remove());
+                deleteBtn.style.display = 'none';
+                toggleBtn.innerHTML = '<i class="fas fa-check-square"></i> Select Multiple';
+            } else {
+                // Add checkboxes
+                const treeItems = document.querySelectorAll('.tree-item');
+                treeItems.forEach(item => {
+                    if (!item.querySelector('.category-checkbox')) {
+                        const checkbox = document.createElement('input');
+                        checkbox.type = 'checkbox';
+                        checkbox.className = 'category-checkbox';
+                        checkbox.style.marginRight = '10px';
+                        checkbox.dataset.id = item.dataset.id || '';
+                        item.querySelector('.tree-level').prepend(checkbox);
+                    }
+                });
+                deleteBtn.style.display = 'inline-flex';
+                toggleBtn.innerHTML = '<i class="fas fa-times"></i> Cancel Selection';
+            }
+        }
+        
+        // Delete selected items
+        function deleteSelected() {
+            const checkboxes = document.querySelectorAll('.category-checkbox:checked');
+            if (checkboxes.length === 0) {
+                showMessage('Please select at least one item to delete', 'error');
+                return;
+            }
+            
+            const count = checkboxes.length;
+            if (confirm(`Delete ${count} selected expense type${count > 1 ? 's' : ''}? This cannot be undone.`)) {
+                const idsToDelete = [];
+                checkboxes.forEach(cb => {
+                    if (cb.dataset.id) {
+                        idsToDelete.push(parseInt(cb.dataset.id));
+                    }
+                });
+                
+                // Filter out deleted items
+                categories = categories.filter(c => !idsToDelete.includes(c.id));
+                localStorage.setItem('chsl_categories', JSON.stringify(categories));
+                
+                renderCategories();
+                updateStats();
+                updateExportButton();
+                toggleCheckboxes(); // Remove checkboxes
+                
+                showMessage(`Deleted ${count} expense type${count > 1 ? 's' : ''}`, 'success');
+            }
+        }
+    </script>
+</body>
+</html>

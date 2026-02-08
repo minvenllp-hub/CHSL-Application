@@ -1,0 +1,494 @@
+/**
+ * MODULE ROUTER - FIXED VERSION
+ * All HTML embedded - Tabs working
+ */
+
+class ModuleRouter {
+    constructor() {
+        this.modules = {
+            'dashboard': this.getDashboardHTML(),
+            'mc-master': this.getMCMasterHTML(),
+            'expense-master': this.getExpenseMasterHTML(),
+            'reports': this.getReportsHTML()
+        };
+        this.currentModule = null;
+    }
+
+    init() {
+        console.log('🚀 Router initialized - All HTML embedded');
+        this.setupNavigation();
+        this.loadModule('dashboard');
+    }
+
+    setupNavigation() {
+        document.addEventListener('click', (event) => {
+            const navItem = event.target.closest('[data-module]');
+            if (navItem) {
+                event.preventDefault();
+                const moduleName = navItem.getAttribute('data-module');
+                this.loadModule(moduleName);
+            }
+        });
+    }
+
+    loadModule(moduleName) {
+        if (this.currentModule === moduleName) return;
+        
+        console.log(`📂 Loading module: ${moduleName}`);
+        
+        // Get HTML from our embedded modules
+        const html = this.modules[moduleName];
+        
+        if (!html) {
+            this.showError(`Module "${moduleName}" not found`);
+            return;
+        }
+        
+        // Update content
+        document.getElementById('module-container').innerHTML = html;
+        
+        // Update active navigation
+        this.updateActiveNav(moduleName);
+        
+        // Set current module
+        this.currentModule = moduleName;
+        
+        console.log(`✅ Module loaded: ${moduleName}`);
+        
+        // Initialize module-specific functionality
+        this.initModule(moduleName);
+    }
+
+    initModule(moduleName) {
+        if (moduleName === 'mc-master') {
+            this.initMCMaster();
+        }
+    }
+
+    initMCMaster() {
+        console.log('🎯 Initializing MC Master tabs');
+        
+        // Setup tab switching
+        document.addEventListener('click', (e) => {
+            if (e.target.matches('.mc-tab-btn')) {
+                this.switchMCTab(e.target.getAttribute('data-tab'));
+            }
+        });
+        
+        // Show first tab by default
+        setTimeout(() => this.switchMCTab('members'), 100);
+    }
+
+    switchMCTab(tabName) {
+        console.log(`Switching to tab: ${tabName}`);
+        
+        // Hide all tab contents
+        document.querySelectorAll('.mc-tab-content').forEach(content => {
+            content.style.display = 'none';
+        });
+        
+        // Show selected tab
+        const selectedTab = document.getElementById(`mc-${tabName}-tab`);
+        if (selectedTab) {
+            selectedTab.style.display = 'block';
+        }
+        
+        // Update button styles
+        document.querySelectorAll('.mc-tab-btn').forEach(btn => {
+            if (btn.getAttribute('data-tab') === tabName) {
+                btn.style.background = '#1e3c72';
+                btn.style.color = 'white';
+                btn.style.fontWeight = '600';
+            } else {
+                btn.style.background = '#e9ecef';
+                btn.style.color = '#495057';
+                btn.style.fontWeight = 'normal';
+            }
+        });
+    }
+
+    getDashboardHTML() {
+        return `
+            <div class="welcome-screen">
+                <div class="welcome-icon">
+                    <i class="fas fa-building fa-4x"></i>
+                </div>
+                <h2>Welcome to CHSL Expense Management</h2>
+                <p>Select a module from the navigation menu to begin.</p>
+                <div class="quick-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <h3>MC Members</h3>
+                        <p class="stat-value">7</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-tags"></i>
+                        <h3>Expense Categories</h3>
+                        <p class="stat-value">18</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                        <h3>Approval Rules</h3>
+                        <p class="stat-value">126</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    getMCMasterHTML() {
+        return `
+            <div class="mc-master-module">
+                <h2 style="color: #1e3c72; font-size: 28px; margin-bottom: 10px;">
+                    <i class="fas fa-users"></i> MC Master Module
+                </h2>
+                <p style="color: #666; margin-bottom: 30px;">Manage Management Committee members and expense approval rules</p>
+                
+                <!-- Tabs -->
+                <div style="display: flex; gap: 5px; background: #f8f9fa; padding: 8px; border-radius: 12px; margin-bottom: 30px;">
+                    <button class="mc-tab-btn" data-tab="members" style="
+                        padding: 12px 24px;
+                        background: #1e3c72;
+                        color: white;
+                        border: none;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        flex: 1;
+                        font-weight: 600;
+                    ">MC Members</button>
+                    
+                    <button class="mc-tab-btn" data-tab="expenses" style="
+                        padding: 12px 24px;
+                        background: #e9ecef;
+                        color: #495057;
+                        border: none;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        flex: 1;
+                    ">Expense Categories</button>
+                    
+                    <button class="mc-tab-btn" data-tab="approval" style="
+                        padding: 12px 24px;
+                        background: #e9ecef;
+                        color: #495057;
+                        border: none;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        flex: 1;
+                    ">Approval Matrix</button>
+                </div>
+                
+                <!-- Tab Content -->
+                <div id="mc-tab-content">
+                    <!-- Members Tab -->
+                    <div id="mc-members-tab" class="mc-tab-content">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="color: #2a5298; margin: 0;">
+                                <i class="fas fa-user-tie"></i> MC Members Directory
+                            </h3>
+                            <div style="color: #666; font-weight: 600;">4 Office Bearers + 3 MC Members</div>
+                        </div>
+                        
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; min-width: 700px;">
+                                <thead>
+                                    <tr style="background: #1e3c72; color: white;">
+                                        <th style="padding: 15px; text-align: left;">Designation</th>
+                                        <th style="padding: 15px; text-align: left;">Name</th>
+                                        <th style="padding: 15px; text-align: left;">Approval Category</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- OFFICE BEARERS -->
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <strong>Secretary</strong>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <strong>Vinod Gada</strong>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <span style="background: #e9d8fd; color: #44337a; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                                Office Bearer
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <strong>Jt Secretary</strong>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <strong>Ankit Bazari</strong>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <span style="background: #e9d8fd; color: #44337a; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                                Office Bearer
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <strong>Treasurer</strong>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <strong>Poonam Makwana</strong>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <span style="background: #e9d8fd; color: #44337a; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                                Office Bearer
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <strong>Chairperson</strong>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <strong>Nilesh Vani</strong>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <span style="background: #e9d8fd; color: #44337a; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                                Office Bearer
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- MC MEMBERS -->
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">MC Member</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Daksesh Amin</strong></td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                            <span style="background: #bee3f8; color: #2a4365; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                                As Per Approval Matrix
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">MC Member</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Gautam Jivrajka</strong></td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                            <span style="background: #bee3f8; color: #2a4365; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                                As Per Approval Matrix
+                                            </span>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">MC Member</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Ameet Pamecha</strong></td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                            <span style="background: #bee3f8; color: #2a4365; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                                As Per Approval Matrix
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Expenses Tab -->
+                    <div id="mc-expenses-tab" class="mc-tab-content" style="display: none;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <h3 style="color: #2a5298; margin: 0;">
+                                <i class="fas fa-file-invoice-dollar"></i> Expense Categories Master
+                            </h3>
+                            <div style="color: #666; font-weight: 600;">18 Categories Total</div>
+                        </div>
+                        
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; min-width: 700px;">
+                                <thead>
+                                    <tr style="background: #1e3c72; color: white;">
+                                        <th style="padding: 15px; text-align: left;">Expense Category</th>
+                                        <th style="padding: 15px; text-align: left;">Approval Required</th>
+                                        <th style="padding: 15px; text-align: left;">Approval Authority</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">Electricity Charges</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                            <span style="background: #fed7d7; color: #742a2a; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                                Office Bearer Approval
+                                            </span>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">Secretary, Jt Secretary, Treasurer, Chairperson</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">Property Tax for Parking & Common Areas</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                            <span style="background: #fed7d7; color: #742a2a; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                                Office Bearer Approval
+                                            </span>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">Secretary, Jt Secretary, Treasurer, Chairperson</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">Security Charges</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                            <span style="background: #c6f6d5; color: #22543d; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                                Any MC Member
+                                            </span>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">All MC Members (7)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">Water Charges - Tanker</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                            <span style="background: #c6f6d5; color: #22543d; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                                Any MC Member
+                                            </span>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">All MC Members (7)</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">Housekeeping Charges</td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                            <span style="background: #c6f6d5; color: #22543d; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">
+                                                Any MC Member
+                                            </span>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee;">All MC Members (7)</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Approval Matrix Tab -->
+                    <div id="mc-approval-tab" class="mc-tab-content" style="display: none;">
+                        <div style="margin-bottom: 20px;">
+                            <h3 style="color: #2a5298; margin: 0 0 10px 0;">
+                                <i class="fas fa-clipboard-check"></i> Approval Matrix
+                            </h3>
+                            <p style="color: #666; margin: 0;">Shows which MC members can approve which expenses</p>
+                        </div>
+                        
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; min-width: 800px;">
+                                <thead>
+                                    <tr style="background: #1e3c72; color: white;">
+                                        <th style="padding: 15px; text-align: left;">MC Member</th>
+                                        <th style="padding: 15px; text-align: center;">Electricity Charges<br><small>Office Bearer Approval</small></th>
+                                        <th style="padding: 15px; text-align: center;">Security Charges<br><small>Any MC Member</small></th>
+                                        <th style="padding: 15px; text-align: center;">Water Tanker<br><small>Any MC Member</small></th>
+                                        <th style="padding: 15px; text-align: center;">Property Tax<br><small>Office Bearer Approval</small></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- OFFICE BEARERS -->
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <strong>Vinod Gada</strong><br>
+                                            <small style="color: #666;">Secretary (Office Bearer)</small>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                            ✓ CAN APPROVE
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                            ✓ CAN APPROVE
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                            ✓ CAN APPROVE
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                            ✓ CAN APPROVE
+                                        </td>
+                                    </tr>
+                                    
+                                    <!-- MC MEMBERS -->
+                                    <tr>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                            <strong>Daksesh Amin</strong><br>
+                                            <small style="color: #666;">MC Member</small>
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #fed7d7; text-align: center; font-weight: 600; color: #742a2a;">
+                                            ✗ REQUIRES OFFICE BEARER
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                            ✓ CAN APPROVE
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                            ✓ CAN APPROVE
+                                        </td>
+                                        <td style="padding: 12px; border-bottom: 1px solid #eee; background: #fed7d7; text-align: center; font-weight: 600; color: #742a2a;">
+                                            ✗ REQUIRES OFFICE BEARER
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    getExpenseMasterHTML() {
+        return `
+            <div style="padding: 20px;">
+                <h2 style="color: #1e3c72; font-size: 28px; margin-bottom: 10px;">
+                    <i class="fas fa-tags"></i> Expense Master Module
+                </h2>
+                <p style="color: #666; margin-bottom: 30px;">Your existing Expense Categories module will be integrated here.</p>
+                
+                <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                    <h3 style="color: #2a5298; margin-bottom: 20px;">Ready for Integration</h3>
+                    <p>In the next step, we'll integrate your existing categories.html and categories.js files.</p>
+                    <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                        <p style="margin: 0; color: #666; display: flex; align-items: center; gap: 10px;">
+                            <i class="fas fa-info-circle"></i>
+                            <span>This module will manage all 18 expense categories with full functionality.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    getReportsHTML() {
+        return `
+            <div style="padding: 20px;">
+                <h2 style="color: #1e3c72; font-size: 28px; margin-bottom: 10px;">
+                    <i class="fas fa-chart-bar"></i> Reports Module
+                </h2>
+                <p style="color: #666; margin-bottom: 30px;">Generate reports and analytics</p>
+                
+                <div style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+                    <h3 style="color: #2a5298; margin-bottom: 20px;">Reports Coming Soon</h3>
+                    <p>This module will provide various reports including:</p>
+                    <ul style="margin-top: 15px; color: #666;">
+                        <li>Expense summary reports</li>
+                        <li>Approval workflow reports</li>
+                        <li>MC member activity reports</li>
+                        <li>Financial overview</li>
+                    </ul>
+                </div>
+            </div>
+        `;
+    }
+
+    updateActiveNav(moduleName) {
+        document.querySelectorAll('[data-module]').forEach(item => {
+            item.classList.remove('active');
+        });
+        const activeNav = document.querySelector(`[data-module="${moduleName}"]`);
+        if (activeNav) activeNav.classList.add('active');
+    }
+
+    showError(message) {
+        document.getElementById('module-container').innerHTML = `
+            <div style="padding: 40px; text-align: center; color: #f56565;">
+                <i class="fas fa-exclamation-triangle fa-3x"></i>
+                <h3>Error Loading Module</h3>
+                <p>${message}</p>
+            </div>
+        `;
+    }
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', () => {
+    window.appRouter = new ModuleRouter();
+    window.appRouter.init();
+});

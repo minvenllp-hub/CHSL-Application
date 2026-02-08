@@ -1,0 +1,346 @@
+<div style="padding: 20px;">
+    <h2 style="color: #1e3c72; font-size: 28px; margin-bottom: 10px;">
+        <i class="fas fa-users"></i> MC Master Module
+    </h2>
+    <p style="color: #666; margin-bottom: 30px;">Manage Management Committee members and expense approval rules</p>
+    
+    <!-- Tabs -->
+    <div style="display: flex; gap: 5px; background: #f8f9fa; padding: 8px; border-radius: 12px; margin-bottom: 30px;">
+        <button onclick="showTab('members')" style="
+            padding: 12px 24px;
+            background: #1e3c72;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            flex: 1;
+            font-weight: 600;
+        ">MC Members</button>
+        
+        <button onclick="showTab('expenses')" style="
+            padding: 12px 24px;
+            background: #e9ecef;
+            color: #495057;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            flex: 1;
+        ">Expense Categories</button>
+        
+        <button onclick="showTab('approval')" style="
+            padding: 12px 24px;
+            background: #e9ecef;
+            color: #495057;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            flex: 1;
+        ">Approval Matrix</button>
+    </div>
+    
+    <!-- Tab Content -->
+    <div id="tab-content" style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
+        <!-- Members Tab -->
+        <div id="members-tab">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="color: #2a5298; margin: 0;">
+                    <i class="fas fa-user-tie"></i> MC Members Directory
+                </h3>
+                <div style="color: #666; font-weight: 600;">7 Members Total</div>
+            </div>
+            
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 700px;">
+                    <thead>
+                        <tr style="background: #1e3c72; color: white;">
+                            <th style="padding: 15px; text-align: left;">Designation</th>
+                            <th style="padding: 15px; text-align: left;">First Name</th>
+                            <th style="padding: 15px; text-align: left;">Last Name</th>
+                            <th style="padding: 15px; text-align: left;">Full Name</th>
+                            <th style="padding: 15px; text-align: left;">Approval Rights</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- ALL 7 MEMBERS -->
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Secretary</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Vinod</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Gada</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Vinod Gada</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                <span style="background: #c6f6d5; color: #22543d; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Full Rights</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Jt Secretary</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Ankit</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Bazari</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Ankit Bazari</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                <span style="background: #c6f6d5; color: #22543d; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Full Rights</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Treasurer</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Poonam</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Makwana</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Poonam Makwana</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                <span style="background: #c6f6d5; color: #22543d; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Full Rights</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Chairperson</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Nilesh</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Vani</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Nilesh Vani</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                <span style="background: #c6f6d5; color: #22543d; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Full Rights</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">MC Member</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Daksesh</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Amin</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Daksesh Amin</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                <span style="background: #fed7d7; color: #742a2a; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Limited Rights</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">MC Member</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Gautam</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Jivrajka</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Gautam Jivrajka</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                <span style="background: #fed7d7; color: #742a2a; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Limited Rights</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">MC Member</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Ameet</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;"><strong>Pamecha</strong></td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Ameet Pamecha</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                <span style="background: #fed7d7; color: #742a2a; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Limited Rights</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                <p style="margin: 0; color: #666; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-info-circle"></i>
+                    <span><strong>4 Senior Members</strong> have Full Approval Rights. <strong>3 MC Members</strong> have Limited Rights.</span>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Expenses Tab -->
+        <div id="expenses-tab" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3 style="color: #2a5298; margin: 0;">
+                    <i class="fas fa-file-invoice-dollar"></i> Expense Categories Master
+                </h3>
+                <div style="color: #666; font-weight: 600;">18 Categories Total</div>
+            </div>
+            
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 700px;">
+                    <thead>
+                        <tr style="background: #1e3c72; color: white;">
+                            <th style="padding: 15px; text-align: left;">Expense Category</th>
+                            <th style="padding: 15px; text-align: left;">Approval Type</th>
+                            <th style="padding: 15px; text-align: left;">Who Can Approve</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Electricity Charges</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                <span style="background: #fed7d7; color: #742a2a; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Restricted</span>
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Senior Members Only</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Property Tax for Parking & Common Areas</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                <span style="background: #fed7d7; color: #742a2a; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">Restricted</span>
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Senior Members Only</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Water Charges - Tanker</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                <span style="background: #c6f6d5; color: #22543d; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">All-approval</span>
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Any MC Member</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Security Charges</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                <span style="background: #c6f6d5; color: #22543d; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">All-approval</span>
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Any MC Member</td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Housekeeping Charges</td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">
+                                <span style="background: #c6f6d5; color: #22543d; padding: 6px 12px; border-radius: 12px; font-size: 12px; font-weight: 600;">All-approval</span>
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee;">Any MC Member</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                <p style="margin: 0; color: #666; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-info-circle"></i>
+                    <span>Showing 5 of 18 categories. <strong>9 All-approval</strong> (green) and <strong>9 Restricted</strong> (red) categories.</span>
+                </p>
+            </div>
+        </div>
+        
+        <!-- Approval Matrix Tab -->
+        <div id="approval-tab" style="display: none;">
+            <div style="margin-bottom: 20px;">
+                <h3 style="color: #2a5298; margin: 0 0 10px 0;">
+                    <i class="fas fa-clipboard-check"></i> Approval Matrix
+                </h3>
+                <p style="color: #666; margin: 0;">Shows which MC members can approve which expenses</p>
+            </div>
+            
+            <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; min-width: 800px;">
+                    <thead>
+                        <tr style="background: #1e3c72; color: white;">
+                            <th style="padding: 15px; text-align: left;">MC Member</th>
+                            <th style="padding: 15px; text-align: center;">Electricity</th>
+                            <th style="padding: 15px; text-align: center;">Property Tax</th>
+                            <th style="padding: 15px; text-align: center;">Security</th>
+                            <th style="padding: 15px; text-align: center;">Water Tanker</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                <strong>Vinod Gada</strong><br>
+                                <small style="color: #666;">Secretary</small>
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                ✓ YES
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                ✓ YES
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                ✓ YES
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                ✓ YES
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                <strong>Daksesh Amin</strong><br>
+                                <small style="color: #666;">MC Member</small>
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #fed7d7; text-align: center; font-weight: 600; color: #742a2a;">
+                                ✗ NO
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #fed7d7; text-align: center; font-weight: 600; color: #742a2a;">
+                                ✗ NO
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                ✓ YES
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                ✓ YES
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #f8f9fa;">
+                                <strong>Poonam Makwana</strong><br>
+                                <small style="color: #666;">Treasurer</small>
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                ✓ YES
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                ✓ YES
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                ✓ YES
+                            </td>
+                            <td style="padding: 12px; border-bottom: 1px solid #eee; background: #c6f6d5; text-align: center; font-weight: 600; color: #22543d;">
+                                ✓ YES
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px;">
+                <p style="margin: 0; color: #666; display: flex; align-items: center; gap: 10px;">
+                    <i class="fas fa-lightbulb"></i>
+                    <span><strong>Rule:</strong> Green = Can approve, Red = Cannot approve. Senior members can approve all expenses. MC Members can only approve "All-approval" expenses.</span>
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Statistics -->
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 40px;">
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; text-align: center; transition: all 0.3s;">
+            <i class="fas fa-users fa-2x" style="color: #2a5298; margin-bottom: 15px;"></i>
+            <div style="font-size: 32px; font-weight: bold; color: #1e3c72;">7</div>
+            <div style="color: #718096; font-size: 14px;">MC Members</div>
+        </div>
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; text-align: center; transition: all 0.3s;">
+            <i class="fas fa-tags fa-2x" style="color: #2a5298; margin-bottom: 15px;"></i>
+            <div style="font-size: 32px; font-weight: bold; color: #1e3c72;">18</div>
+            <div style="color: #718096; font-size: 14px;">Expense Categories</div>
+        </div>
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; text-align: center; transition: all 0.3s;">
+            <i class="fas fa-check-circle fa-2x" style="color: #2a5298; margin-bottom: 15px;"></i>
+            <div style="font-size: 32px; font-weight: bold; color: #1e3c72;">9</div>
+            <div style="color: #718096; font-size: 14px;">All-Approval</div>
+        </div>
+        <div style="background: #f8f9fa; padding: 25px; border-radius: 12px; text-align: center; transition: all 0.3s;">
+            <i class="fas fa-user-shield fa-2x" style="color: #2a5298; margin-bottom: 15px;"></i>
+            <div style="font-size: 32px; font-weight: bold; color: #1e3c72;">9</div>
+            <div style="color: #718096; font-size: 14px;">Restricted</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tab switching function
+    function showTab(tabName) {
+        // Hide all tab contents
+        document.getElementById('members-tab').style.display = 'none';
+        document.getElementById('expenses-tab').style.display = 'none';
+        document.getElementById('approval-tab').style.display = 'none';
+        
+        // Show selected tab
+        document.getElementById(tabName + '-tab').style.display = 'block';
+        
+        // Update button styles
+        const buttons = document.querySelectorAll('.mc-master-container button, [onclick^="showTab"]');
+        buttons.forEach(btn => {
+            if (btn.textContent.includes(tabName)) {
+                btn.style.background = '#1e3c72';
+                btn.style.color = 'white';
+                btn.style.fontWeight = '600';
+            } else {
+                btn.style.background = '#e9ecef';
+                btn.style.color = '#495057';
+                btn.style.fontWeight = 'normal';
+            }
+        });
+    }
+    
+    console.log('✅ MC Master Module loaded - Showing ALL 7 members');
+</script>
