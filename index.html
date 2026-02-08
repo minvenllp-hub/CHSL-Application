@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHSL Expense Categories Management System</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/categories.css">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-file-invoice-dollar"></i>
+                <h1>CHSL Expense Categories</h1>
+                <span class="version">Version 1.02</span>
+            </div>
+            <div class="subtitle">
+                <p>Manage Major Expense Heads, Minor Expense Heads, Why Spent & Spent For Categories</p>
+            </div>
+        </header>
+
+        <!-- Tabs Navigation -->
+        <div class="tabs">
+            <button class="tab active" data-tab="add-edit" onclick="switchTab('add-edit')">
+                <i class="fas fa-plus-circle"></i> Add/Edit
+            </button>
+            <button class="tab" data-tab="view" onclick="switchTab('view')">
+                <i class="fas fa-list"></i> View Categories
+            </button>
+            <button class="tab" data-tab="bulk" onclick="switchTab('bulk')">
+                <i class="fas fa-upload"></i> Bulk Operations
+            </button>
+        </div>
+
+        <!-- Message Alert -->
+        <div id="messageAlert" class="alert" style="display: none;"></div>
+
+        <!-- Tab Content: Add/Edit -->
+        <div id="add-edit-tab" class="tab-content active">
+            <div class="card">
+                <h2><i class="fas fa-edit"></i> Add/Edit Expense Type</h2>
+                <p class="card-description">Define the hierarchy for expense categorization</p>
+                
+                <form id="categoryForm" onsubmit="event.preventDefault(); saveCategory();">
+                    <input type="hidden" id="editId" value="">
+                    <input type="hidden" id="isLevel1Edit" value="false">
+                    
+                    <div class="form-group">
+                        <label for="level1">
+                            <i class="fas fa-layer-group"></i> Major Expense Head *
+                        </label>
+                        <select id="level1" required onchange="updateLevel2()">
+                            <option value="">Select Major Expense Head</option>
+                            <!-- Options will be populated by JavaScript -->
+                        </select>
+                        <div class="validation-error" id="level1-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="level2">
+                            <i class="fas fa-layer-group"></i> Minor Expense Head *
+                        </label>
+                        <select id="level2" required onchange="updateLevel3()">
+                            <option value="">Select Major Expense Head first</option>
+                        </select>
+                        <div class="validation-error" id="level2-error"></div>
+                    </div>
+                    
+                    <div id="level3-row" class="form-group" style="display: none;">
+                        <label for="level3">
+                            <i class="fas fa-question-circle"></i> Why Spent *
+                        </label>
+                        <select id="level3" required onchange="updateLevel4()">
+                            <option value="">Select Minor Expense Head first</option>
+                        </select>
+                        <div class="validation-error" id="level3-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="level4">
+                            <i class="fas fa-receipt"></i> Spent For
+                        </label>
+                        <select id="level4">
+                            <option value="">Select Why Spent first</option>
+                        </select>
+                        <div class="validation-error" id="level4-error"></div>
+                    </div>
+                    
+                    <div id="freeTextGroup" class="form-group" style="display: none;">
+                        <label for="freeText">
+                            <i class="fas fa-pen"></i> Custom Description *
+                        </label>
+                        <input type="text" id="freeText" 
+                               placeholder="Enter custom expense description..."
+                               maxlength="25">
+                        <div class="char-counter">
+                            <span id="charCount">0/25 characters</span>
+                        </div>
+                        <div class="validation-error" id="freeText-error"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="status">
+                            <i class="fas fa-toggle-on"></i> Status
+                        </label>
+                        <select id="status">
+                            <option value="Active" selected>Active</option>
+                            <option value="Inactive">Inactive</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="clearForm()">
+                            <i class="fas fa-times"></i> Clear
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Expense Type
+                        </button>
+                    </div>
+                </form>
+                
+                <div class="card-footer">
+                    <div class="quick-actions">
+                        <button class="btn btn-outline" onclick="loadDefaultData()">
+                            <i class="fas fa-database"></i> Load Default Categories
+                        </button>
+                        <div class="hint">
+                            <i class="fas fa-info-circle"></i> Loads predefined expense types to get started
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: View Categories -->
+        <div id="view-tab" class="tab-content">
+            <div class="card">
+                <h2><i class="fas fa-sitemap"></i> Expense Categories Hierarchy</h2>
+                <p class="card-description">Tree view of all expense categories. Click actions to edit or delete.</p>
+                
+                <div class="stats-bar">
+                    <div class="stat">
+                        <i class="fas fa-folder"></i>
+                        <span>Total: <strong id="totalCategories">0</strong></span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-check-circle"></i>
+                        <span>Active: <strong id="activeCategories">0</strong></span>
+                    </div>
+                    <div class="stat">
+                        <i class="fas fa-layer-group"></i>
+                        <span>With Sub-levels: <strong id="withSublevels">0</strong></span>
+                    </div>
+                </div>
+                
+                <div class="tree-container">
+                    <div id="categoriesList">
+                        <!-- Categories will be rendered here by JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <button id="exportButton" class="btn btn-success" onclick="exportToCSV()" style="display: none;">
+                        <i class="fas fa-download"></i> Export to CSV
+                    </button>
+                    <div class="legend">
+                        <div class="legend-item">
+                            <span class="level-indicator level-1">Major</span> Major Expense Head
+                        </div>
+                        <div class="legend-item">
+                            <span class="level-indicator level-2">Minor</span> Minor Expense Head
+                        </div>
+                        <div class="legend-item">
+                            <span class="level-indicator level-3">Why</span> Why Spent
+                        </div>
+                        <div class="legend-item">
+                            <span class="level-indicator level-4">For</span> Spent For
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab Content: Bulk Operations -->
+        <div id="bulk-tab" class="tab-content">
+            <div class="card">
+                <h2><i class="fas fa-file-import"></i> Bulk Upload & Export</h2>
+                <p class="card-description">Import categories from CSV or export existing data</p>
+                
+                <div class="bulk-section">
+                    <h3><i class="fas fa-upload"></i> Upload CSV File</h3>
+                    <p>Upload a CSV file with expense categories. The system will automatically fix common issues.</p>
+                    
+                    <div class="csv-format">
+                        <code>Major Expense Head, Minor Expense Head, Why Spent, Spent For, Status</code>
+                        <div class="format-hint">
+                            <i class="fas fa-info-circle"></i> Use "None" for empty levels. Status must be "Active" or "Inactive"
+                        </div>
+                    </div>
+                    
+                    <!-- User-Friendly Note -->
+                    <div class="user-friendly-note">
+                        <h4><i class="fas fa-hands-helping"></i> Smart Auto-Correction System</h4>
+                        <p>This system automatically fixes common issues:</p>
+                        <ul>
+                            <li><i class="fas fa-check-circle check-icon"></i> Column header variations and typos</li>
+                            <li><i class="fas fa-check-circle check-icon"></i> Abbreviations (AMT → Amount, ELEC → Electrical)</li>
+                            <li><i class="fas fa-check-circle check-icon"></i> "None" variations (n/a, na, blank)</li>
+                            <li><i class="fas fa-check-circle check-icon"></i> Status variations (act, yes, 1 → Active)</li>
+                            <li><i class="fas fa-check-circle check-icon"></i> Extra spaces and capitalization</li>
+                            <li><i class="fas fa-check-circle check-icon"></i> Common expense category typos</li>
+                        </ul>
+                        <p class="note-tip">
+                            <i class="fas fa-lightbulb"></i> Just upload your CSV - we'll handle the rest and show you what was fixed!
+                        </p>
+                    </div>
+                    
+                    <div class="upload-area">
+                        <input type="file" id="fileInput" accept=".csv" onchange="handleFileUpload(event)" 
+                               style="display: none;">
+                        <label for="fileInput" class="upload-label">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <span>Choose CSV File</span>
+                        </label>
+                        <div class="file-hint">Max file size: 1MB</div>
+                    </div>
+                    
+                    <!-- Template Download -->
+                    <div class="template-download">
+                        <button id="downloadTemplateBtn" class="btn btn-outline" onclick="downloadCSVTemplate()">
+                            <i class="fas fa-file-download"></i> Download CSV Template
+                        </button>
+                        <div class="template-hint">
+                            <i class="fas fa-info-circle"></i> Use this template to ensure correct format
+                        </div>
+                    </div>
+                    
+                    <div id="csvPreview" style="display: none;">
+                        <h4>Upload Preview</h4>
+                        <div id="uploadStats" class="upload-stats"></div>
+                        
+                        <div class="table-container">
+                            <table id="previewTable">
+                                <thead>
+                                    <tr>
+                                        <th>Major Expense Head</th>
+                                        <th>Minor Expense Head</th>
+                                        <th>Why Spent</th>
+                                        <th>Spent For</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Preview rows will be inserted here -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <div class="preview-actions">
+                            <button class="btn btn-secondary" onclick="cancelUpload()">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                            <button class="btn btn-primary" onclick="processUpload()">
+                                <i class="fas fa-file-import"></i> Import Data
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bulk-section">
+                    <h3><i class="fas fa-download"></i> Export Data</h3>
+                    <p>Export all expense categories to a CSV file</p>
+                    
+                    <div class="export-actions">
+                        <button id="exportAllButton" class="btn btn-success" onclick="exportToCSV()">
+                            <i class="fas fa-file-export"></i> Export All Categories
+                        </button>
+                        <div class="export-hint">
+                            <i class="fas fa-info-circle"></i> Exports in the same format as import
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    <div class="instructions">
+                        <h4><i class="fas fa-lightbulb"></i> Instructions:</h4>
+                        <ul>
+                            <li>CSV file should have columns similar to the template</li>
+                            <li>Use "None" for levels that don't exist (or leave blank)</li>
+                            <li>Status should be "Active" or "Inactive" (other values auto-corrected)</li>
+                            <li>Maximum 25 characters per field (auto-truncated if longer)</li>
+                            <li>Duplicate entries will be skipped during import</li>
+                            <li>All corrections are shown transparently before import</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>CHSL Expense Categories Management System | Version 1.02 | Designed for Cooperative Housing Society Management</p>
+                <p class="footer-note">
+                    <i class="fas fa-shield-alt"></i> Data stored locally in your browser
+                </p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/categories.js"></script>
+</body>
+</html>
